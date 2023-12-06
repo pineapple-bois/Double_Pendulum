@@ -24,6 +24,7 @@ The result is a system of $|\textbf{q}|$ coupled, second-order differential equa
 ----
 
 The equations are uncoupled by letting,
+
 $$
 \omega_i = \frac{\text{d} \theta_i}{\text{d} t}
 $$
