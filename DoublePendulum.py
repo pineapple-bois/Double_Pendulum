@@ -1,7 +1,7 @@
 import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import odeint
+from scipy.integrate import odeint, solve_ivp
 
 
 # Declare variables & constants
@@ -9,21 +9,21 @@ t = sp.Symbol("t")
 g = sp.Symbol("g", positive=True, real=True)
 l1, l2, m1, m2 = sp.symbols("l1, l2, m1, m2", positive=True, real=True)
 
-# declare symbolic variables
+# Declare symbolic variables
 theta1 = sp.Function('theta1')(t)
 theta2 = sp.Function('theta2')(t)
 theta1_dot = sp.Function('theta1_dot')(t)
 theta2_dot = sp.Function('theta2_dot')(t)
 
-# coordinates of P1
+# Coordinates of P1
 x1 = l1*sp.sin(theta1)
 y1 = -l1*sp.cos(theta1)
 
-# coordinates of P2
+# Coordinates of P2
 x2 = x1 + l2*sp.sin(theta2)
 y2 = y1 - l2*sp.cos(theta2)
 
-# derivatives w.r.t time
+# Derivatives w.r.t time
 xdot1 = sp.diff(x1, t)
 ydot1 = sp.diff(y1, t)
 
@@ -171,7 +171,7 @@ eqn2 = sp.Eq(eqn2_lhs, eqn2_rhs)
 
 def extract_coefficient(equation, derivative_term):
     """
-    Extracts the coefficient, including the denominator, of the specified derivative term from the left-hand side of the equation.
+    Extracts the coefficient, including the denominator, of the specified derivative term from LHS of equation.
 
     Parameters:
         equation (sympy.Expr): The equation to extract the coefficient from.
@@ -247,7 +247,7 @@ eqn4 = eq4.rhs.subs(derivative_subs)
 
 class DoublePendulum:
     """
-    Initialize a DoublePendulum object.
+    Instantiate a DoublePendulum object.
 
     Parameters:
     - parameters (dict): A dictionary containing values for system parameters,
@@ -257,38 +257,38 @@ class DoublePendulum:
     - time_vector (numpy.ndarray): Time vector for numerical integration
                                [start, end, step]
     """
-    def __init__(self, parameters, initial_conditions, time_vector, integrator=odeint, **integrator_args):
-        self.eqn1 = eqn1.subs(parameters)
-        self.eqn2 = eqn2.subs(parameters)
-        self.eqn3 = eqn3.subs(parameters)
-        self.eqn4 = eqn4.subs(parameters)
-
+    def __init__(self, parameters, initial_conditions, time_vector, integrator=solve_ivp, **integrator_args):
         # Convert initial conditions from degrees to radians
         self.initial_conditions = np.deg2rad(initial_conditions)
 
         # Time vector
-        self.time = time_vector
+        self.time = np.linspace(time_vector[0], time_vector[1], time_vector[2])
 
-        # Lambdify the equations individually
-        eqn1_func = sp.lambdify((theta1, theta2, omega1, omega2, t), self.eqn1, 'numpy')
-        eqn2_func = sp.lambdify((theta1, theta2, omega1, omega2, t), self.eqn2, 'numpy')
-        eqn3_func = sp.lambdify((theta1, theta2, omega1, omega2, t), self.eqn3, 'numpy')
-        eqn4_func = sp.lambdify((theta1, theta2, omega1, omega2, t), self.eqn4, 'numpy')
+        # Substitute parameters into the equations
+        eq1_subst = eqn1.subs(parameters)
+        eq2_subst = eqn2.subs(parameters)
+        eq3_subst = eqn3.subs(parameters)
+        eq4_subst = eqn4.subs(parameters)
 
-        # Define a system function for odeint
-        def system(y, t):
-            th1, th2, w1, w2 = y
+        # Lambdify the equations after substitution
+        self.eqn1_func = sp.lambdify((theta1, theta2, omega1, omega2, t), eq1_subst, 'numpy')
+        self.eqn2_func = sp.lambdify((theta1, theta2, omega1, omega2, t), eq2_subst, 'numpy')
+        self.eqn3_func = sp.lambdify((theta1, theta2, omega1, omega2, t), eq3_subst, 'numpy')
+        self.eqn4_func = sp.lambdify((theta1, theta2, omega1, omega2, t), eq4_subst, 'numpy')
 
-            return [
-                eqn1_func(th1, th2, w1, w2, t),
-                eqn2_func(th1, th2, w1, w2, t),
-                eqn3_func(th1, th2, w1, w2, t),
-                eqn4_func(th1, th2, w1, w2, t)
-            ]
+        self.sol = self._solve_ode(integrator, **integrator_args)
 
-        self.sol = self._solve_ode(integrator, system, **integrator_args)
+    def _system(self, y, t):
+        th1, th2, w1, w2 = y
+        system = [
+            self.eqn1_func(th1, th2, w1, w2, t),
+            self.eqn2_func(th1, th2, w1, w2, t),
+            self.eqn3_func(th1, th2, w1, w2, t),
+            self.eqn4_func(th1, th2, w1, w2, t)
+        ]
+        return system
 
-    def _solve_ode(self, integrator, system, **integrator_args):
+    def _solve_ode(self, integrator, **integrator_args):
         """
         Solve the system of ODEs using the specified integrator.
 
@@ -298,22 +298,24 @@ class DoublePendulum:
         - **integrator_args: Additional arguments specific to the chosen integrator.
         """
         if integrator == odeint:
-            # Specific arguments can be passed through integrator_args
-            # For example, could pass atol, rtol, etc.
-            sol = integrator(system, self.initial_conditions, self.time, **integrator_args)
+            sol = integrator(self._system, self.initial_conditions, self.time, **integrator_args)
+        elif integrator == solve_ivp:
+            t_span = (self.time[0], self.time[-1])
+            sol = solve_ivp(lambda t, y: self._system(y, t), t_span, self.initial_conditions,
+                            t_eval=self.time, **integrator_args)
+            sol = sol.y.T  # Transpose
         else:
-            # Add more branches for other integrators as needed
             raise ValueError("Unsupported integrator")
-
         return sol
 
     def time_graph(self):
+        # Convert angles from radians to degrees
+        theta1_deg = np.rad2deg(self.sol[:, 0])
+        theta2_deg = np.rad2deg(self.sol[:, 1])
+
         plt.figure(figsize=(10, 6))
-
-        # We limit y-values between -1 and 1
-        plt.plot(self.time, self.sol[:, 0], 'b', label="$θ_1$")
-        plt.plot(self.time, self.sol[:, 1], 'g', label="$θ_2$")
-
+        plt.plot(self.time, theta1_deg, 'b', label="$θ_1$", linewidth=2)
+        plt.plot(self.time, theta2_deg, 'g', label="$θ_2$", linewidth=2)
         plt.xlabel('Time / seconds')
         plt.ylabel('Angular displacement / degrees')
         plt.title('Double Pendulum Time Graph')
@@ -322,11 +324,14 @@ class DoublePendulum:
         plt.show()
 
     def phase_path(self):
-        # Plot the phase space
-        plt.figure(figsize=(10, 6))
-        plt.plot(self.sol[:, 0], self.sol[:, 1], 'b', label="Phase space")
-        plt.xlabel('$θ_1$')
-        plt.ylabel('$θ_2$')
+        # Convert angles from radians to degrees
+        theta1_deg = np.rad2deg(self.sol[:, 0])
+        theta2_deg = np.rad2deg(self.sol[:, 1])
+
+        plt.figure(figsize=(10, 10))
+        plt.plot(theta1_deg, theta2_deg, color='purple', label="Phase Path", linewidth=2)
+        plt.xlabel('$θ_1$ (radians)')
+        plt.ylabel('$θ_2$ (radians)')
         plt.title('Double Pendulum Phase Path')
         plt.legend(loc='best')
         plt.grid(True)
