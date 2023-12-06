@@ -33,3 +33,16 @@ $$
 
 ----
 
+### [Simulated systems](https://github.com/pineapple-bois/Double_Pendulum/blob/master/Simulation.ipynb)
+
+A few systems illustrating periodic/chaotic behaviour are explored
+
+----
+
+#### Next steps
+
+- Creating an interactive app
+- Deriving equations of motion to include moment of inertia of rod (non-zero mass)
+- Quantifying chaotic behaviour
+
+----
