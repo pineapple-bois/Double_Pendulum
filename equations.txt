@@ -1,0 +1,8 @@
+Eq(omega1(t), Derivative(theta1(t), t))
+##############################
+Eq(omega2(t), Derivative(theta2(t), t))
+##############################
+Eq(Derivative(omega1(t), t), (g*m1*sin(theta1(t)) + g*m2*sin(theta1(t) - 2*theta2(t))/2 + g*m2*sin(theta1(t))/2 + l1*m2*sin(2*theta1(t) - 2*theta2(t))*Derivative(theta1(t), t)**2/2 + l2*m2*sin(theta1(t) - theta2(t))*Derivative(theta2(t), t)**2)/(l1*(-m1 + m2*cos(theta1(t) - theta2(t))**2 - m2)))
+##############################
+Eq(Derivative(omega2(t), t), ((m1 + m2)*(g*sin(theta2(t)) - l1*sin(theta1(t) - theta2(t))*Derivative(theta1(t), t)**2) - (g*m1*sin(theta1(t)) + g*m2*sin(theta1(t)) + l2*m2*sin(theta1(t) - theta2(t))*Derivative(theta2(t), t)**2)*cos(theta1(t) - theta2(t)))/(l2*(-m1 + m2*cos(theta1(t) - theta2(t))**2 - m2)))
+##############################
