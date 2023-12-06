@@ -256,6 +256,7 @@ class DoublePendulum:
                                [theta1 angle, theta2 angle, omega1 velocity, omega2 velocity]
     - time_vector (numpy.ndarray): Time vector for numerical integration
                                [start, end, step]
+    - integrator: SciPy integrator used, default is solve_ivp
     """
     def __init__(self, parameters, initial_conditions, time_vector, integrator=solve_ivp, **integrator_args):
         # Convert initial conditions from degrees to radians
@@ -298,7 +299,7 @@ class DoublePendulum:
         - **integrator_args: Additional arguments specific to the chosen integrator.
         """
         if integrator == odeint:
-            sol = integrator(self._system, self.initial_conditions, self.time, **integrator_args)
+            sol = odeint(self._system, self.initial_conditions, self.time, **integrator_args)
         elif integrator == solve_ivp:
             t_span = (self.time[0], self.time[-1])
             sol = solve_ivp(lambda t, y: self._system(y, t), t_span, self.initial_conditions,
@@ -330,8 +331,8 @@ class DoublePendulum:
 
         plt.figure(figsize=(10, 10))
         plt.plot(theta1_deg, theta2_deg, color='purple', label="Phase Path", linewidth=2)
-        plt.xlabel('$θ_1$ (radians)')
-        plt.ylabel('$θ_2$ (radians)')
+        plt.xlabel('$θ_1$ / degrees')
+        plt.ylabel('$θ_2$ / degrees')
         plt.title('Double Pendulum Phase Path')
         plt.legend(loc='best')
         plt.grid(True)
