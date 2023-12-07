@@ -2,6 +2,8 @@ import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint, solve_ivp
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 
 
 # Declare variables & constants
@@ -265,6 +267,9 @@ class DoublePendulum:
         # Time vector
         self.time = np.linspace(time_vector[0], time_vector[1], time_vector[2])
 
+        # Parameters
+        self.parameters = parameters
+
         # Substitute parameters into the equations
         eq1_subst = eqn1.subs(parameters)
         eq2_subst = eqn2.subs(parameters)
@@ -309,8 +314,25 @@ class DoublePendulum:
             raise ValueError("Unsupported integrator")
         return sol
 
+    def _calculate_positions(self):
+        # Unpack solution for theta1 and theta2
+        theta_1, theta_2 = self.sol[:, 0], self.sol[:, 1]
+
+        # Evaluate lengths of the pendulum arms using the provided parameter values
+        l_1 = float(self.parameters[l1])
+        l_2 = float(self.parameters[l2])
+
+        # Calculate the (x, y) positions of the first pendulum bob
+        x_1 = l_1 * np.sin(theta_1)
+        y_1 = -l_1 * np.cos(theta_1)
+
+        # Calculate the (x, y) positions of the second pendulum bob
+        x_2 = x_1 + l_2 * np.sin(theta_2)
+        y_2 = y_1 - l_2 * np.cos(theta_2)
+
+        return x_1, y_1, x_2, y_2
+
     def time_graph(self):
-        # Convert angles from radians to degrees
         theta1_deg = np.rad2deg(self.sol[:, 0])
         theta2_deg = np.rad2deg(self.sol[:, 1])
 
@@ -325,7 +347,6 @@ class DoublePendulum:
         plt.show()
 
     def phase_path(self):
-        # Convert angles from radians to degrees
         theta1_deg = np.rad2deg(self.sol[:, 0])
         theta2_deg = np.rad2deg(self.sol[:, 1])
 
@@ -337,3 +358,110 @@ class DoublePendulum:
         plt.legend(loc='best')
         plt.grid(True)
         plt.show()
+
+    def precompute_positions(self):
+        """
+        Precomputes and stores the positions of both pendulum bobs for each time step.
+
+        This method calculates the (x, y) positions of the first and second pendulum bobs at each time step,
+        using the provided initial conditions and system parameters. The positions are stored in a NumPy array
+        as an instance attribute, which can be used for plotting and animation purposes, reducing the
+        computational load at rendering time.
+        """
+        self.precomputed_positions = np.array(self._calculate_positions())
+
+    def animate_pendulum(self):
+        """
+        Generates an animation for the double pendulum using precomputed positions.
+
+        Raises:
+            AttributeError: If `precompute_positions` has not been called before animation.
+
+        Returns:
+            A Plotly figure object containing the animation.
+        """
+        # Check if precomputed_positions has been calculated
+        if not hasattr(self, 'precomputed_positions') or self.precomputed_positions is None:
+            raise AttributeError("Precomputed positions must be calculated before animating. "
+                                 "Please call 'precompute_positions' method first.")
+
+        x_1, y_1, x_2, y_2 = self.precomputed_positions
+
+        # Create figure with initial trace
+        fig = go.Figure(
+            data=[go.Scatter(
+                x=[0, x_1[0], x_2[0]],
+                y=[0, y_1[0], y_2[0]],
+                mode='lines+markers',
+                name='Pendulum',
+                line=dict(width=2),
+                marker=dict(size=12)
+            )]
+        )
+
+        # Calculate the max extent based on the precomputed positions
+        max_extent = max(
+            np.max(np.abs(x_1)),
+            np.max(np.abs(y_1)),
+            np.max(np.abs(x_2)),
+            np.max(np.abs(y_2))
+        )
+
+        # Add padding to the max extent
+        padding = 0.1 * max_extent  # 10% padding
+        axis_range_with_padding = [-max_extent - padding, max_extent + padding]
+
+        # Add frames to the animation
+        step = 10
+        frames = [go.Frame(data=[go.Scatter(x=[0, x_1[k], x_2[k]], y=[0, y_1[k], y_2[k]],
+                                            mode='lines+markers',
+                                            line=dict(width=2))])
+                  for k in range(0, len(x_1), step)]  # Use a step to reduce the number of frames
+        fig.frames = frames
+
+        # Update figure layout to create a square plot with padded axis range
+        fig.update_layout(
+            xaxis=dict(
+                range=axis_range_with_padding,
+                autorange=False,
+                zeroline=False,
+            ),
+            yaxis=dict(
+                range=axis_range_with_padding,
+                autorange=False,
+                zeroline=False,
+                scaleanchor='x',
+                scaleratio=1,
+            ),
+            autosize=False,
+            width=700,  # Use the same size for width and height
+            height=700,
+            updatemenus=[{
+                'type': 'buttons',
+                'buttons': [
+                    dict(
+                        label="Play",
+                        method="animate",
+                        args=[None, {"frame": {"duration": 33, "redraw": True}, "fromcurrent": True,
+                                     "mode": "immediate"}]
+                    ),
+                    dict(
+                        label="Stop",
+                        method="animate",
+                        args=[[None], {"frame": {"duration": 0, "redraw": False}, "mode": "immediate",
+                                       "transition": {"duration": 0}}]
+                    )
+                ],
+                'direction': "left",
+                'pad': {"r": 10, "t": 87},
+                'showactive': False,
+                'type': "buttons",
+                'x': 0.1,
+                'xanchor': "right",
+                'y': 0,
+                'yanchor': "top"
+            }],
+            margin=dict(l=20, r=20, t=20, b=20),  # Adjust margins to fit layout
+        )
+
+        return fig
