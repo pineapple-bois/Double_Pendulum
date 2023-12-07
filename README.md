@@ -37,7 +37,7 @@ Systems illustrating periodic/chaotic behaviour are explored.
 
 The gif below shows chaotic motion with release from rest for large initial angles $[\theta_1=-105 \degree, \theta_2=105 \degree]$
 
-![img](Resources/Chaotic.gif)
+![img](Resources/Chaotic_1.gif)
 
 ----
 
@@ -54,7 +54,7 @@ In this simulation;
 - $m_1=m_2=M_1=M_2=1\text{kg}$
 - $l_1=2l_2$ 
 
-![img](Compound_Double_Pendulum/Image_files/moment2.gif)
+![img](Compound_Double_Pendulum/Image_files/Moment_2.gif)
 
 ----
 
