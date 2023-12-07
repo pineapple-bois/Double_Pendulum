@@ -39,11 +39,16 @@ That is, $\omega_i, \ i=1,2$ represents the angular velocity.
 
 A few systems illustrating periodic/chaotic behaviour are explored.
 
+The gif below shows chaotic motion with release from rest for a large initial angle $[\theta_1=-105 \degree, \theta_2=105 \degree]$
+
+![img](Resources/Chaotic.gif)
+
 ----
 
 #### Next steps
 
-- Creating an interactive app.
+- Creating an interactive app ✅
+  - Need to deploy now...
 - Deriving equations of motion to include moment of inertia of rod (non-zero mass).
 - Quantifying chaotic behaviour.
 
