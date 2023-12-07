@@ -58,6 +58,12 @@ In this simulation;
 
 ----
 
+[![Licence: MIT](https://img.shields.io/badge/Licence-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This project operates under the [MIT](LICENSE.md) licence
+
+----
+
 #### Next steps
 
 - Creating Dash app
