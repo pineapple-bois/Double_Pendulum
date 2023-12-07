@@ -27,25 +27,39 @@ The equations are uncoupled by letting $\omega_i = \frac{\text{d}}{\text{d} t}\t
 
 So $\omega_i$ for $i=1,2$ represents the angular velocity with $\frac{\text{d}}{\text{d} t}\omega_i \equiv \frac{\text{d}^2}{\text{d}^2 t}\theta_i$
 
-[Derivation](https://github.com/pineapple-bois/Double_Pendulum/blob/master/Derivation.ipynb)
+#### [Derivation](https://github.com/pineapple-bois/Double_Pendulum/blob/master/Derivation.ipynb)
 
 ----
 
-### [Simulated systems](https://github.com/pineapple-bois/Double_Pendulum/blob/master/Simulation.ipynb)
+### [Model rod simulation](https://github.com/pineapple-bois/Double_Pendulum/blob/master/Simulation.ipynb)
 
-A few systems illustrating periodic/chaotic behaviour are explored.
+Systems illustrating periodic/chaotic behaviour are explored.
 
-The gif below shows chaotic motion with release from rest for a large initial angle $[\theta_1=-105 \degree, \theta_2=105 \degree]$
+The gif below shows chaotic motion with release from rest for large initial angles $[\theta_1=-105 \degree, \theta_2=105 \degree]$
 
 ![img](Resources/Chaotic.gif)
 
 ----
 
+### [Rods with non-zero mass](linkplaceholder...)
+
+The rods $OP_1$ and $P_1P_2$ are now modeled as rigid and inextensible with a distributed mass. This significantly influences the pendulum dynamics.
+
+
+#### [Derivation](linkplaceholder...)
+
+The gif below shows release from rest for large initial angles $[\theta_1=-105 \degree, \theta_2=105 \degree]$ as above.
+- $l_2=2l_1$ in this simulation.
+
+![img](Compound_Double_Pendulum/Image_files/moment2.gif)
+
+----
+
 #### Next steps
 
-- Creating an interactive app ✅
-  - Need to deploy now...
-- Deriving equations of motion to include moment of inertia of rod (non-zero mass).
+- Creating Dash app
+- Dynamically creating the trace plot on the animation
+  - The method I tried was computational expensive - need workaround
 - Quantifying chaotic behaviour.
 
 ----
