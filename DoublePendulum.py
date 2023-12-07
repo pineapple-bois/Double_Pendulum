@@ -370,9 +370,13 @@ class DoublePendulum:
         """
         self.precomputed_positions = np.array(self._calculate_positions())
 
-    def animate_pendulum(self):
+    def animate_pendulum(self, trace=False, appearance='dark'):
         """
         Generates an animation for the double pendulum using precomputed positions.
+
+        Parameters:
+            trace (bool): If True, show the trace of the pendulum.
+            appearance (str): 'dark' for dark mode (default), 'light' for light mode.
 
         Raises:
             AttributeError: If `precompute_positions` has not been called before animation.
@@ -387,6 +391,22 @@ class DoublePendulum:
 
         x_1, y_1, x_2, y_2 = self.precomputed_positions
 
+        # Colors
+        # Check appearance and set colors
+        if appearance == 'dark':
+            pendulum_color = 'cyan'  # Lighter color for the pendulum
+            trace_color_theta1 = 'salmon'  # Softer red for theta1 trace
+            trace_color_theta2 = 'lightgreen'  # Softer green for theta2 trace
+
+        elif appearance == 'light':
+            pendulum_color = 'navy'  # Darker color for the pendulum
+            trace_color_theta1 = 'tomato'  # Brighter red for theta1 trace
+            trace_color_theta2 = 'mediumseagreen'  # Brighter green for theta2 trace
+
+        else:
+            print("Invalid appearance setting. Please choose 'dark' or 'light'.")
+            return None  # Exit the function if invalid appearance
+
         # Create figure with initial trace
         fig = go.Figure(
             data=[go.Scatter(
@@ -394,10 +414,27 @@ class DoublePendulum:
                 y=[0, y_1[0], y_2[0]],
                 mode='lines+markers',
                 name='Pendulum',
-                line=dict(width=2),
-                marker=dict(size=12)
+                line=dict(width=2, color=pendulum_color),
+                marker=dict(size=10, color=pendulum_color)
             )]
         )
+
+        # If trace is True, add path traces
+        if trace:
+            path_1 = go.Scatter(
+                x=x_1, y=y_1,
+                mode='lines',
+                name='Path of P1',
+                line=dict(width=1, color=trace_color_theta1),
+            )
+            path_2 = go.Scatter(
+                x=x_2, y=y_2,
+                mode='lines',
+                name='Path of P2',
+                line=dict(width=1, color=trace_color_theta2),
+            )
+            fig.add_trace(path_1)
+            fig.add_trace(path_2)
 
         # Calculate the max extent based on the precomputed positions
         max_extent = max(
