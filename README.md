@@ -43,7 +43,7 @@ The gif below shows chaotic motion with release from rest for large initial angl
 
 ### [Rods with non-zero mass simulation](https://github.com/pineapple-bois/Double_Pendulum/tree/master/Compound_Double_Pendulum)
 
-The rods $OP_1$ and $P_1P_2$ are now modeled as rigid and inextensible with a distributed mass. This significantly influences the pendulum dynamics.
+The rods $OP_1$ and $P_1P_2$ are now modeled as rigid and inextensible with uniformly distributed mass, $M_1$ and $M_2$. This significantly influences the pendulum dynamics.
 
 
 #### [Derivation](https://github.com/pineapple-bois/Double_Pendulum/blob/master/Compound_Double_Pendulum/Derivation_Moments.ipynb)
