@@ -63,6 +63,7 @@ In this simulation;
 - Creating Dash app
 - Dynamically creating the trace plot on the animation
   - The method I tried was computational expensive - need workaround
+  - Non-functioning [boiler plate code](https://github.com/pineapple-bois/Double_Pendulum/blob/master/To_do/dynamic_traces.py)
 - Quantifying chaotic behaviour.
 
 ----
