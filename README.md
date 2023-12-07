@@ -23,13 +23,9 @@ The result is a system of $|\textbf{q}|$ coupled, second-order differential equa
 
 ----
 
-The equations are uncoupled by letting,
+The equations are uncoupled by letting $\omega_i = \frac{\text{d}}{\text{d} t}\theta_i$
 
-$$
-\omega_i = \frac{\text{d} \theta_i}{\text{d} t}
-$$
-
-That is, $\omega_i, \ i=1,2$ represents the angular velocity.
+So $\omega_i$ for $i=1,2$ represents the angular velocity with $\frac{\text{d}}{\text{d} t}\omega_i \equiv \frac{\text{d}^2}{\text{d}^2 t}\theta_i$
 
 [Derivation](https://github.com/pineapple-bois/Double_Pendulum/blob/master/Derivation.ipynb)
 
