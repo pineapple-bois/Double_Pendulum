@@ -52,7 +52,7 @@ The gif below shows release from rest for large initial angles $[\theta_1=-105 \
 
 In this simulation;
 - $m_1=m_2=M_1=M_2=1\text{kg}$
-- $l_2=2l_1$ 
+- $l_1=2l_2$ 
 
 ![img](Compound_Double_Pendulum/Image_files/moment2.gif)
 
