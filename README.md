@@ -31,7 +31,7 @@ So $\omega_i$ for $i=1,2$ represents the angular velocity with $\frac{\text{d}}{
 
 ----
 
-### [Model rod simulation](Simulation.ipynb)
+### [Model rod: Simulation](Simulation.ipynb)
 
 Systems illustrating periodic/chaotic behaviour are explored.
 
@@ -41,20 +41,21 @@ The gif below shows chaotic motion with release from rest for large initial angl
 
 ----
 
-### [Rods with non-zero mass simulation](Compound_Double_Pendulum)
+### [Rods with non-zero mass: Simulation](Compound_Double_Pendulum/Simulation_Compound.ipynb)
 
 The rods $OP_1$ and $P_1P_2$ are now modeled as rigid and inextensible with uniformly distributed mass, $M_1$ and $M_2$. This significantly influences the pendulum dynamics.
 
 
-#### [Derivation](Compound_Double_Pendulum/Derivation_Moments.ipynb)
+#### [Derivation](Compound_Double_Pendulum/Derivation_Compound.ipynb)
 
 The gif below shows release from rest for large initial angles $[\theta_1=-105 \degree, \theta_2=105 \degree]$ as above.
 
-In this simulation;
-- $m_1=m_2=M_1=M_2=1\text{kg}$
-- $l_1=2l_2$ 
+In this simulation, the only difference is the mass distribution - uniform along the length;
+- $M_1=M_2=1\text{kg}$
+- $l_1=l_2=1\text{m}$
 
-![img](Compound_Double_Pendulum/Image_files/Moment_2.gif)
+
+![img](Compound_Double_Pendulum/Image_files/Moment1.gif)
 
 ----
 
