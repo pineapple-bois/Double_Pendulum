@@ -199,7 +199,7 @@ def isolate_terms(equation):
     return terms
 
 
-def simplify_system_equations(eq1, eq2, model='uniform'):
+def simplify_system(eq1, eq2, model='uniform'):
     """
     Simplifies the system of equations based on the specified model.
 

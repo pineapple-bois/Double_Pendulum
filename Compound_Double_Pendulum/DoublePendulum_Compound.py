@@ -26,7 +26,7 @@ L_uniform = form_lagrangian(theta1, theta2, l1, l2, M1, M2, g, model='uniform')
 eq1, eq2 = euler_lagrange_system(L_uniform, theta1, theta2, model='uniform')
 
 # Simplify equations
-eqn1, eqn2 = simplify_system_equations(eq1, eq2, model='uniform')
+eqn1, eqn2 = simplify_system(eq1, eq2, model='uniform')
 
 # Extract coefficients
 alpha1 = extract_coefficient(eqn1, sp.diff(theta2, t, 2))
