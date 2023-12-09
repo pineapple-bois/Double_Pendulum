@@ -213,20 +213,19 @@ def simplify_system(eq1, eq2, model='uniform'):
     tuple of sympy.Eq
         The simplified equations for the system.
     """
-    # Isolate second derivatives and simplify equations for eq1
-    second_derivatives_1 = isolate_terms(eq1)
-    lhs_1 = sum(second_derivatives_1)
-    rhs_1 = sp.simplify(eq1.lhs - lhs_1)
-    eqn1 = sp.Eq(lhs_1, rhs_1)
-
-    # Isolate second derivatives and simplify equations for eq2
-    second_derivatives_2 = isolate_terms(eq2)
-    lhs_2 = sum(second_derivatives_2)
-    rhs_2 = sp.simplify(eq2.lhs - lhs_2)
-    eqn2 = sp.Eq(lhs_2, rhs_2)
-
-    # Simplify based on model
     if model == 'uniform':
+        # Isolate second derivatives and simplify equations for eq1
+        second_derivatives_1 = isolate_terms(eq1)
+        lhs_1 = sum(second_derivatives_1)
+        rhs_1 = sp.simplify(eq1.lhs - lhs_1)
+        eqn1 = sp.Eq(lhs_1, rhs_1)
+
+        # Isolate second derivatives and simplify equations for eq2
+        second_derivatives_2 = isolate_terms(eq2)
+        lhs_2 = sum(second_derivatives_2)
+        rhs_2 = sp.simplify(eq2.lhs - lhs_2)
+        eqn2 = sp.Eq(lhs_2, rhs_2)
+
         # Simplify eqn1
         eqn1_lhs = sp.simplify(eqn1.lhs / (l1 * (7 * M1 + 3 * M2)))
         eqn1_rhs = sp.simplify(eqn1.rhs / (l1 * (7 * M1 + 3 * M2)))
@@ -237,11 +236,36 @@ def simplify_system(eq1, eq2, model='uniform'):
         eqn2_rhs = sp.simplify(eqn2.rhs / (7 * l2))
         eqn2 = sp.Eq(eqn2_lhs, eqn2_rhs)
 
-    elif model == 'cylindrical':
-        # Placeholder for cylindrical model simplification
-        pass
+        return eqn1, eqn2
 
-    return eqn1, eqn2
+    elif model == 'cylindrical':
+        # Define second-order derivative terms
+        theta1_ddot = sp.diff(theta1, t, 2)
+        theta2_ddot = sp.diff(theta2, t, 2)
+
+        # Collect both second derivatives in eq1 and isolate other terms
+        eq1_lhs_collected = sp.collect(eq1.lhs, (theta1_ddot, theta2_ddot))
+        eqn1_rhs = sp.sympify(M1 * g * l1 * sp.sin(theta1) + M2 * g * l1 * sp.sin(theta1) + M2 * l1 * l2 * sp.sin(
+            theta1 - theta2) * sp.diff(theta2, t) ** 2 / 2)
+        eqn1_lhs = eq1_lhs_collected - eqn1_rhs
+        eq1_simp = sp.Eq(eqn1_lhs, -eqn1_rhs)
+
+        # Collect both second derivatives in eq2 and isolate other terms
+        eq2_lhs_collected = sp.collect(eq2.lhs, (theta1_ddot, theta2_ddot))
+        eqn2_rhs = sp.sympify(2 * g * l2 * sp.sin(theta2) - l1 * l2 * sp.sin(theta1 - theta2) * sp.diff(theta1, t) ** 2)
+        eqn2_lhs = eq2_lhs_collected - eqn2_rhs
+        eq2_simp = sp.Eq(eqn2_lhs, eqn2_rhs)
+
+        # Simplify further
+        eqn1_lhs = sp.simplify(eq1_simp.lhs / (M1 * R1 ** 2 / 2 + 7 * M1 * l1 ** 2 / 6 + M2 * l1 ** 2 / 2))
+        eqn1_rhs = sp.simplify(eq1_simp.rhs / (M1 * R1 ** 2 / 2 + 7 * M1 * l1 ** 2 / 6 + M2 * l1 ** 2 / 2))
+        eqn1 = sp.Eq(eqn1_lhs, eqn1_rhs)
+
+        eqn2_lhs = sp.simplify(eq2_simp.lhs / (R2 ** 2 + 7 * l2 ** 2 / 3))
+        eqn2_rhs = sp.simplify(eq2_simp.rhs / (R2 ** 2 + 7 * l2 ** 2 / 3))
+        eqn2 = sp.Eq(eqn2_lhs, eqn2_rhs)
+
+        return eqn1, eqn2
 
 
 def extract_coefficient(equation, derivative_term):

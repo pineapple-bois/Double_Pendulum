@@ -17,16 +17,18 @@ theta2 = sp.Function('theta2')(t)
 omega1 = sp.Function('omega1')(t)
 omega2 = sp.Function('omega2')(t)
 
-# TODO! implement a different method for 'cylindrical rod' - (In functions)
+# Define a model
+model_type = 'uniform'
+# If 'uniform', remove arg "R1, R2" from "form lagrangian" function
 
 # Form Lagrangian
-L_uniform = form_lagrangian(theta1, theta2, l1, l2, M1, M2, g, model='uniform')
+L = form_lagrangian(theta1, theta2, l1, l2, M1, M2, g, model=model_type)
 
 # Form EL equations
-eq1, eq2 = euler_lagrange_system(L_uniform, theta1, theta2, model='uniform')
+eq1, eq2 = euler_lagrange_system(L, theta1, theta2, model=model_type)
 
 # Simplify equations
-eqn1, eqn2 = simplify_system(eq1, eq2, model='uniform')
+eqn1, eqn2 = simplify_system(eq1, eq2, model=model_type)
 
 # Extract coefficients
 alpha1 = extract_coefficient(eqn1, sp.diff(theta2, t, 2))
