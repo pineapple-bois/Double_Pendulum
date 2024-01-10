@@ -59,11 +59,22 @@ In this simulation, the only difference is the mass distribution - uniform along
 
 ----
 
-[![Licence: MIT](https://img.shields.io/badge/Licence-MIT-yellow.svg)](LICENSE.md) [![Pineapple Bois](https://img.shields.io/badge/Website-Pineapple_Bois-5087B2.svg?style=flat&logo=telegram)](https://pineapple-bois.github.io)
+### Update 10/1/2024: [Refactored taking OOP approach](OOP) 
+
+#### [Functions_OOP.py](OOP/Functions_OOP.py)
+
+- The utilities in this file abstract the complex symbolic derivation tasks.
+
+#### [Class_OOP.py](OOP/Class_OOP.py)
+
+- This file defines the `DoublePendulum` class, encapsulating all aspects of a double pendulum simulation within an object-oriented framework. 
+- The class allows for the selection of `simple` or `compound` pendulum models
+
+### [Simulation](OOP/Sim_OOP.ipynb)
 
 ----
 
-#### Next steps
+### Next steps
 
 - Creating Dash app
 - Dynamically creating the trace plot on the animation
@@ -71,5 +82,9 @@ In this simulation, the only difference is the mass distribution - uniform along
   - Non-functioning work-in-progress [code](To_do/dynamic_traces.py)
 - Quantifying chaotic behaviour.
   - This will enable me to choose better example and better quantify the range of dynamics 
+
+----
+
+[![Licence: MIT](https://img.shields.io/badge/Licence-MIT-yellow.svg)](LICENSE.md) [![Pineapple Bois](https://img.shields.io/badge/Website-Pineapple_Bois-5087B2.svg?style=flat&logo=telegram)](https://pineapple-bois.github.io)
 
 ----
