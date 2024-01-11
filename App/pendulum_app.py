@@ -13,78 +13,62 @@ M1, M2, m1, m2, l1, l2, g = sp.symbols("M1, M2, m1, m2, l1, l2, g", positive=Tru
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
-    # Dropdown for model type
-    html.Div([
-        html.Label('Model Type:'),
-        dcc.Dropdown(
-            id='model-type',
-            options=[
-                {'label': 'Simple', 'value': 'simple'},
-                {'label': 'Compound', 'value': 'compound'}
-            ],
-            value='simple'  # Default value
-        ),
-    ], style={'padding': '20px'}),
-
-    # Button for Unity Parameters
-    html.Div([
-        html.Button('Unity Parameters', id='unity-parameters', n_clicks=0),
-    ], style={'padding': '20px'}),
-
-    # Parameters Inputs
-    html.Div([
-        html.Label('Parameters: (l1, l2, m1, m2, M1, M2, g)'),
-        dcc.Input(id='param_l1', type='number', placeholder='l1 (length of rod 1)'),
-        dcc.Input(id='param_l2', type='number', placeholder='l2 (length of rod 2)'),
-        dcc.Input(id='param_m1', type='number', placeholder='m1 (mass of bob 1)'),
-        dcc.Input(id='param_m2', type='number', placeholder='m2 (mass of bob 2)'),
-        dcc.Input(id='param_M1', type='number', placeholder='M1 (mass of rod 1)'),
-        dcc.Input(id='param_M2', type='number', placeholder='M2 (mass of rod 2)'),
-        dcc.Input(id='param_g', type='number', placeholder='g (acceleration due to gravity)'),
-    ], style={'padding': '20px'}),
-
-    # Initial Conditions Inputs
-    html.Div([
-        html.Label('Initial Conditions: (theta1, theta2, omega1, omega2)'),
-        dcc.Input(id='init_cond_theta1', type='number', placeholder='theta1'),
-        dcc.Input(id='init_cond_theta2', type='number', placeholder='theta2'),
-        dcc.Input(id='init_cond_omega1', type='number', placeholder='omega1'),
-        dcc.Input(id='init_cond_omega2', type='number', placeholder='omega2'),
-    ], style={'padding': '20px'}),
-
-    # Time Vector Inputs
-    html.Div([
-        html.Label('Time Vector: (start, stop, step)'),
-        dcc.Input(id='time_start', type='number', placeholder='Start Time'),
-        dcc.Input(id='time_end', type='number', placeholder='End Time'),
-        dcc.Input(id='time_steps', type='number', placeholder='Number of Steps'),
-    ], style={'padding': '20px'}),
-
-    # Submit Button
-    html.Div([
-        html.Button('Run Simulation', id='submit-val', n_clicks=0),
-    ], style={'padding': '20px'}),
-
-    # Dropdown for Appearance
-    html.Div([
-        html.Label('Appearance:'),
-        dcc.Dropdown(
-            id='appearance-dropdown',
-            options=[
-                {'label': 'Dark', 'value': 'dark'},
-                {'label': 'Light', 'value': 'light'}
-            ],
-            value='dark'  # Default value
-        ),
-    ], style={'padding': '20px'}),
-
+    html.Div(className='container', children=[
+        html.Div(className='column', children=[
+            html.Div(className='input-group', children=[
+                html.Label('Model Type:', className='label'),
+                dcc.Dropdown(
+                    id='model-type',
+                    options=[
+                        {'label': 'Simple', 'value': 'simple'},
+                        {'label': 'Compound', 'value': 'compound'}
+                    ],
+                    value='simple'
+                ),
+            ]),
+            html.Button('Unity Parameters', id='unity-parameters', n_clicks=0, className='button'),
+        ]),
+        # Column for parameters inputs
+        html.Div(className='column', children=[
+            html.Div(className='input-group', children=[
+                html.Label('Parameters: (l1, l2, m1, m2, M1, M2, g)', className='label'),
+                dcc.Input(id='param_l1', type='number', placeholder='l1 (length of rod 1)', className='input'),
+                dcc.Input(id='param_l2', type='number', placeholder='l2 (length of rod 2)', className='input'),
+                dcc.Input(id='param_m1', type='number', placeholder='m1 (mass of bob 1)', className='input'),
+                dcc.Input(id='param_m2', type='number', placeholder='m2 (mass of bob 2)', className='input'),
+                dcc.Input(id='param_M1', type='number', placeholder='M1 (mass of rod 1)', className='input'),
+                dcc.Input(id='param_M2', type='number', placeholder='M2 (mass of rod 2)', className='input'),
+                dcc.Input(id='param_g', type='number', placeholder='g (acceleration due to gravity)',
+                          className='input'),
+            ]),
+        ]),
+        # Column for initial conditions inputs
+        html.Div(className='column', children=[
+            html.Div(className='input-group', children=[
+                html.Label('Initial Conditions: (θ1, θ2, ω1, ω2)', className='label'),
+                dcc.Input(id='init_cond_theta1', type='number', placeholder='θ1', className='input'),
+                dcc.Input(id='init_cond_theta2', type='number', placeholder='θ2', className='input'),
+                dcc.Input(id='init_cond_omega1', type='number', placeholder='ω1', className='input'),
+                dcc.Input(id='init_cond_omega2', type='number', placeholder='ω2', className='input'),
+            ]),
+        ]),
+        # Column for time vector inputs
+        html.Div(className='column', children=[
+            html.Div(className='input-group', children=[
+                html.Label('Time Vector: (start, stop, step)', className='label'),
+                dcc.Input(id='time_start', type='number', placeholder='Start Time', className='input'),
+                dcc.Input(id='time_end', type='number', placeholder='End Time', className='input'),
+                dcc.Input(id='time_steps', type='number', placeholder='Number of Steps', className='input'),
+            ]),
+        ]),
+    ]),
+    html.Button('Run Simulation', id='submit-val', n_clicks=0, className='button'),
     # Graph Outputs
     html.Div([
         dcc.Graph(id='time-graph'),
         dcc.Graph(id='phase-graph'),
         dcc.Graph(id='pendulum-animation'),
-    ], style={'padding': '20px'}),
-
+    ], className='container'),
 ])
 
 
@@ -124,13 +108,12 @@ def set_unity_parameters(n_clicks):
      State('param_M1', 'value'),
      State('param_M2', 'value'),
      State('param_g', 'value'),
-     State('appearance-dropdown', 'value'),  # Add state for appearance dropdown
      State('model-type', 'value')]  # Add the state for the model type dropdown
 )
 def update_graphs(n_clicks, init_cond_theta1, init_cond_theta2, init_cond_omega1, init_cond_omega2,
                   time_start, time_end, time_steps,
                   param_l1, param_l2, param_m1, param_m2, param_M1, param_M2, param_g,
-                  appearance_dropdown, model_type):
+                  model_type):
     if n_clicks > 0:
         initial_conditions = [init_cond_theta1, init_cond_theta2, init_cond_omega1, init_cond_omega2]
         time_vector = [time_start, time_end, time_steps]
@@ -153,7 +136,7 @@ def update_graphs(n_clicks, init_cond_theta1, init_cond_theta2, init_cond_omega1
 
         # Generate the animation figure
         pendulum.precompute_positions()  # Make sure positions are precomputed
-        animation_fig = pendulum.animate_pendulum(trace=True, appearance=appearance_dropdown)
+        animation_fig = pendulum.animate_pendulum(trace=True)
 
         return time_fig, phase_fig, animation_fig
     else:

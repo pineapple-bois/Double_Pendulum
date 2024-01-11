@@ -1,0 +1,48 @@
+body {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px; /* Adjust the size as needed */
+}
+
+.button, .Select-control, .input, .label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px; /* Adjust the size as needed for specific elements */
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* creates 4 columns */
+  gap: 20px; /* space between columns */
+  padding: 20px; /* padding around the grid */
+}
+
+.input-group:first-child {
+  grid-column: 1 / -1; /* makes the time graph span all columns */
+}
+
+.label {
+  margin-bottom: 5px;
+}
+
+.input {
+  margin-bottom: 10px;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    grid-template-columns: 1fr; /* 1 column on very small screens */
+  }
+}
+
