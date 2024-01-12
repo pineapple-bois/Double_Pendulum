@@ -210,7 +210,6 @@ class DoublePendulum:
         x_1, y_1, x_2, y_2 = self.precomputed_positions
 
         # Check appearance and set colors
-        # Inside your animate_pendulum method, within the appearance 'dark' condition
         if appearance == 'dark':
             pendulum_color = 'rgba(255, 255, 255, 0.9)'  # White with slight transparency for visibility
             trace_color_theta1 = 'rgba(255, 165, 0, 0.6)'  # Soft orange with transparency for trace of P1

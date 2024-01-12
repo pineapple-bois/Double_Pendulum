@@ -11,12 +11,9 @@ from Class_OOP import DoublePendulum
 # Sympy variables for parameters
 M1, M2, m1, m2, l1, l2, g = sp.symbols("M1, M2, m1, m2, l1, l2, g", positive=True, real=True)
 
-# Matrix Equations
-with open('assets/simple_eqns.txt', 'r') as file:
-    simple_matrix = file.read()
-
-with open('assets/compound_eqns.txt', 'r') as file:
-    compound_matrix = file.read()
+# Derivation blurb
+with open('assets/mathematics_section.txt', 'r') as file:
+    math_section = file.read()
 
 
 app = dash.Dash(
@@ -28,21 +25,44 @@ app = dash.Dash(
 )
 
 app.layout = html.Div([
-    html.H1("Double Pendulum Simulation", style={'textAlign': 'center', 'color': 'black'}),
+    html.H1("Double Pendulum Simulation: Lagrangian Formulation",
+            style={'textAlign': 'center', 'color': 'black'}),
+    html.P("Blurb",
+           style={'textAlign': 'center', 'color': 'black', 'font-size': "18px"}),
+    # Container to establish a flexbox layout with two columns, instructions and image
     html.Div([
-        html.P("'Unity parameters' sets pendulum arms to 1m & masses to 1kg, with g = 9.81m/s."),
-        html.P("Ensure all initial conditions and parameters are filled."),
-        html.P(" "),
-        html.P("Choose the model type from the dropdown menu. 'Compound' models massive rod."),
-        html.P(" "),
-        html.P("Use the 'Run Simulation' button to start the simulation.")
-        # Add more bullet points as required
-    ], style={'textAlign': 'left', 'margin': '10px'}),
-    # Equation markdown with display block style
-    dcc.Markdown(
-        simple_matrix,
-        mathjax=True
-    ),
+        # Column for instructions (Markdown)
+        html.Div([
+            dcc.Markdown('''
+            ## Instructions
+
+
+            - Please experiment with different initial conditions. 
+                - The initial angles; $\\theta_1$ & $\\theta_2$ are measured counterclockwise in degrees. 
+                - A negative angle gives clockwise rotation.
+
+            - Interesting dynamics can be discovered simply releasing the pendulums from rest. 
+                - The angular velocities; $\omega_1$ & $\omega_2$ can also be specified.
+
+            - "Unity parameters" sets pendulum arms to $1 \\text{m}$ & masses to $1 \\text{kg}$, with $g = 9.81\\text{m s}^{-1}$.
+
+            - Ensure all initial conditions and parameters are filled.
+
+            - There are two models available: 
+                - "Simple" (the default) models a massless rod.
+                - "Compound" models a rod with uniform mass distribution along its length. 
+
+            - Use the "Run Simulation" button to start the simulation.
+            ''', mathjax=True)
+        ], style={'flex': 1, 'margin': '20px', 'font-size': "14px"}),
+
+        # Column for image
+        html.Div([
+            html.Img(src='assets/Double_Pendulum.png', style={'max-width': '100%', 'height': 'auto'})
+        ], style={'flex': 1}),  # Same flex value to take equal space as the instructions column
+    ], style={'display': 'flex'}),  # This creates a flex container with row direction by default
+
+    # Container for inputs and buttons
     html.Div(className='container', children=[
         # Column for model and buttons
         html.Div(className='column', children=[
@@ -93,6 +113,15 @@ app.layout = html.Div([
             ]),
         ]),
     ]),
+
+    # Error message
+    html.Div(id='error-message', style={
+        'color': 'red',
+        'textAlign': 'center',
+        'margin': '20px',
+        'font-size': "20px"
+    }),
+
     # Graphs
     html.Div(className='above-graph-container', children=[
         dcc.Graph(id='pendulum-animation', className='graph'),
@@ -102,15 +131,14 @@ app.layout = html.Div([
         dcc.Graph(id='time-graph', className='graph', responsive=True),
     ]),
 
-    # Error message
-    html.Div(id='error-message', style={'color': 'red', 'textAlign': 'center'}),
+    # Container for the "The Mathematics" section
+    html.Div([
+        # Markdown container for the mathematics explanation
+        html.Div([
+            dcc.Markdown(math_section, mathjax=True)
+        ], className='markdown-latex-container', style={'flex': 1}),
 
-    # Markdown container for the matrix equation
-    html.Div(
-        dcc.Markdown(simple_matrix, mathjax=True),
-        className='markdown-latex-container'
-    ),
-
+    ], style={'display': 'flex', 'margin-top': '20px'}),  # Flex layout with top margin
 ])
 
 
@@ -151,25 +179,25 @@ def reset_values(n_clicks):
 
 # Callback to update the graphs
 @app.callback(
-    [Output('time-graph', 'figure'),
-     Output('phase-graph', 'figure'),
-     Output('pendulum-animation', 'figure'),
-     Output('error-message', 'children')],
-    [Input('submit-val', 'n_clicks')],
-    [State('init_cond_theta1', 'value'),
-     State('init_cond_theta2', 'value'),
-     State('init_cond_omega1', 'value'),
-     State('init_cond_omega2', 'value'),
-     State('time_start', 'value'),
-     State('time_end', 'value'),
-     State('param_l1', 'value'),
-     State('param_l2', 'value'),
-     State('param_m1', 'value'),
-     State('param_m2', 'value'),
-     State('param_M1', 'value'),
-     State('param_M2', 'value'),
-     State('param_g', 'value'),
-     State('model-type', 'value')]  # Add the state for the model type dropdown
+     [Output('time-graph', 'figure'),
+      Output('phase-graph', 'figure'),
+      Output('pendulum-animation', 'figure'),
+      Output('error-message', 'children')],
+     [Input('submit-val', 'n_clicks')],
+     [State('init_cond_theta1', 'value'),
+      State('init_cond_theta2', 'value'),
+      State('init_cond_omega1', 'value'),
+      State('init_cond_omega2', 'value'),
+      State('time_start', 'value'),
+      State('time_end', 'value'),
+      State('param_l1', 'value'),
+      State('param_l2', 'value'),
+      State('param_m1', 'value'),
+      State('param_m2', 'value'),
+      State('param_M1', 'value'),
+      State('param_M2', 'value'),
+      State('param_g', 'value'),
+      State('model-type', 'value')]  # Add the state for the model type dropdown
 )
 def update_graphs(n_clicks, init_cond_theta1, init_cond_theta2, init_cond_omega1, init_cond_omega2,
                   time_start, time_end,
@@ -180,7 +208,7 @@ def update_graphs(n_clicks, init_cond_theta1, init_cond_theta2, init_cond_omega1
         if any(param is None for param in [init_cond_theta1, init_cond_theta2, init_cond_omega1, init_cond_omega2,
                                            time_start, time_end,
                                            param_l1, param_l2, param_m1, param_m2, param_M1, param_M2, param_g]):
-            return no_update, no_update, no_update, "Please fill in all required fields.", ""
+            return no_update, no_update, no_update, "Please fill in all required fields."
 
         initial_conditions = [init_cond_theta1, init_cond_theta2, init_cond_omega1, init_cond_omega2]
         time_steps = int((time_end - time_start) * 200)  # Calculate time_steps
