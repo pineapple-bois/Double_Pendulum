@@ -152,29 +152,46 @@ class DoublePendulum:
 
         return x_1, y_1, x_2, y_2
 
+    # In your DoublePendulum class or wherever you define time_graph and phase_path methods:
+
     def time_graph(self):
-        fig, ax = plt.subplots(figsize=(10, 6))
-        theta1_deg = np.rad2deg(self.sol[:, 0])
-        theta2_deg = np.rad2deg(self.sol[:, 1])
-        ax.plot(self.time, theta1_deg, 'b', label='θ1', linewidth=2)
-        ax.plot(self.time, theta2_deg, 'g', label='θ2', linewidth=2)
+        plt.style.use('default')  # Reset to the default style
+        fig, ax = plt.subplots()
+        # The dpi (dots per inch) is typically 100 for screen display.
+        #dpi = 100
+        #fig_size = 700 / dpi  # Convert pixels to inches figsize=(2*fig_size, fig_size)
+        fig, ax = plt.subplots()
+        # Plot settings to match the animation's appearance
+        ax.plot(self.time, np.rad2deg(self.sol[:, 0]), color='darkorange', label="θ1", linewidth=2)
+        ax.plot(self.time, np.rad2deg(self.sol[:, 1]), color='green', label="θ2", linewidth=2)
+
+        # Set the labels, title, and grid
         ax.set_xlabel('Time / seconds')
         ax.set_ylabel('Angular displacement / degrees')
-        ax.set_title('Time Graph')
-        ax.legend(loc='best')
-        ax.grid(True)
+        ax.set_title('Time Graph', fontname='Courier New', fontsize=16)
+
+        ax.grid(True, color='gray', linestyle='-', linewidth=0.5, alpha=0.7)
+        plt.legend(loc='best')
         return fig
 
     def phase_path(self):
-        fig, ax = plt.subplots(figsize=(10, 10))
-        theta1_deg = np.rad2deg(self.sol[:, 0])
-        theta2_deg = np.rad2deg(self.sol[:, 1])
-        ax.plot(theta1_deg, theta2_deg, color='purple', label="Phase Path", linewidth=2)
+        plt.style.use('default')  # Reset to the default style
+        # The dpi (dots per inch) is typically 100 for screen display.
+        #dpi = 100
+        #fig_size = 700 / dpi  # Convert pixels to inches figsize=(fig_size, fig_size)
+        fig, ax = plt.subplots()
+
+        # Plot settings to match the animation's appearance
+        ax.plot(np.rad2deg(self.sol[:, 0]), np.rad2deg(self.sol[:, 1]), color='navy', label="Phase Path",
+                linewidth=2)
+
+        # Set the labels, title, and grid
         ax.set_xlabel('θ1 / degrees')
         ax.set_ylabel('θ2 / degrees')
-        ax.set_title('Phase Path')
-        ax.legend(loc='best')
-        ax.grid(True)
+        ax.set_title('Phase Path', fontname='Courier New', fontsize=16)
+
+        ax.grid(True, color='gray', linestyle='-', linewidth=0.5, alpha=0.7)
+        plt.legend(loc='best')
         return fig
 
     def precompute_positions(self):
@@ -188,7 +205,7 @@ class DoublePendulum:
         """
         self.precomputed_positions = np.array(self._calculate_positions())
 
-    def animate_pendulum(self, trace=False, appearance='dark'):
+    def animate_pendulum(self, trace=False, appearance='light'):
         """
         Generates an animation for the double pendulum using precomputed positions.
 
