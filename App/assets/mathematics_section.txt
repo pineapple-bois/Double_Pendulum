@@ -1,0 +1,60 @@
+            ## The Mathematics
+
+            Here you can describe the derivation method and the mathematical principles used. This can include:
+
+            - Fundamental concepts of the physics involved.
+            - Detailed steps in the derivation process.
+            - Key assumptions and simplifications made.
+
+            ### Equations
+
+            The simple model:
+
+            $$
+            \left[
+            \begin{matrix}
+            \omega_1(t) \\
+            \omega_2(t) \\
+            \frac{d}{dt} \omega_1(t) \\
+            \frac{d}{dt} \omega_2(t)
+            \end{matrix}
+            \right]
+            =
+            \left[
+            \begin{matrix}
+            \frac{d}{dt} \theta_1(t) \\
+            \frac{d}{dt} \theta_2(t) \\
+            \frac{gm_1 \sin(\theta_1(t)) + \frac{gm_2 \sin(\theta_1(t) - 2 \theta_2(t))}{2} + \frac{gm_2 \sin(\theta_1(t))}{2} + \frac{l_1 m_2 \sin(2 \theta_1(t) - 2 \theta_2(t)) (\frac{d}{dt} \theta_1(t))^2}{2} + l_2 m_2 \sin(\theta_1(t) - \theta_2(t)) (\frac{d}{dt} \theta_2(t))^2}{l_1 (- m_1 + m_2 \cos^2(\theta_1(t) - \theta_2(t)) - m_2)} \\
+            \frac{(m_1 + m_2) (g \sin(\theta_2(t)) - l_1 \sin(\theta_1(t) - \theta_2(t)) (\frac{d}{dt} \theta_1(t))^2) - (gm_1 \sin(\theta_1(t)) + gm_2 \sin(\theta_1(t)) + l_2 m_2 \sin(\theta_1(t) - \theta_2(t)) (\frac{d}{dt} \theta_2(t))^2) \cos(\theta_1(t) - \theta_2(t))}{l_2 (- m_1 + m_2 \cos^2(\theta_1(t) - \theta_2(t)) - m_2)}
+            \end{matrix}
+            \right]
+            $$
+
+            The compound model:
+
+            $$
+            \left[
+            \begin{matrix}
+            \omega_{1}(t) \\
+            \omega_{2}(t) \\
+            \frac{d}{dt} \omega_{1}(t) \\
+            \frac{d}{dt} \omega_{2}(t)
+            \end{matrix}
+            \right]
+            =
+            \left[
+            \begin{matrix}
+            \frac{d}{dt} \theta_{1}(t) \\
+            \frac{d}{dt} \theta_{2}(t) \\
+            \frac{42 M_{1} g \sin(\theta_{1}(t)) + 9 M_{2} g \sin(\theta_{1}(t) - 2 \theta_{2}(t)) + 33 M_{2} g \sin(\theta_{1}(t)) + \frac{9 M_{2} l_{1} \sin(2 \theta_{1}(t) - 2 \theta_{2}(t)) (\frac{d}{dt} \theta_{1}(t))^2}{2} + 21 M_{2} l_{2} \sin(\theta_{1}(t) - \theta_{2}(t)) (\frac{d}{dt} \theta_{2}(t))^2}{l_{1} (- 49 M_{1} + 9 M_{2} \cos^2(\theta_{1}(t) - \theta_{2}(t)) - 21 M_{2})} \\
+            \frac{3 \left((7 M_{1} + 3 M_{2}) (2 g \sin(\theta_{2}(t)) - l_{1} \sin(\theta_{1}(t) - \theta_{2}(t)) (\frac{d}{dt} \theta_{1}(t))^2) - 3 \cdot (2 M_{1} g \sin(\theta_{1}(t)) + 2 M_{2} g \sin(\theta_{1}(t)) + M_{2} l_{2} \sin(\theta_{1}(t) - \theta_{2}(t)) (\frac{d}{dt} \theta_{2}(t))^2) \cos(\theta_{1}(t) - \theta_{2}(t))\right)}{l_{2} (- 49 M_{1} + 9 M_{2} \cos^2(\theta_{1}(t) - \theta_{2}(t)) - 21 M_{2})}
+            \end{matrix}
+            \right]
+            $$
+
+
+            ### Explanation
+
+            Offer explanations for each part of the equations and how they contribute to the overall model.
+
+            This can help in understanding the model's behavior under various conditions.
