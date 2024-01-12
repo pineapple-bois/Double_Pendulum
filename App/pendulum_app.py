@@ -8,6 +8,7 @@ import plotly.tools as tls
 import plotly.graph_objs as go
 import plotly.io as pio
 from Class_OOP import DoublePendulum
+
 # Sympy variables for parameters
 M1, M2, m1, m2, l1, l2, g = sp.symbols("M1, M2, m1, m2, l1, l2, g", positive=True, real=True)
 
@@ -27,7 +28,8 @@ app = dash.Dash(
 app.layout = html.Div([
     html.H1("Double Pendulum Simulation: Lagrangian Formulation",
             style={'textAlign': 'center', 'color': 'black'}),
-    html.P("Blurb",
+    dcc.Markdown('''The system has two degrees of freedom and is uniquely determined by the values
+     of $\\theta_1$ and $\\theta_2$''', mathjax=True,
            style={'textAlign': 'center', 'color': 'black', 'font-size': "18px"}),
     # Container to establish a flexbox layout with two columns, instructions and image
     html.Div([
@@ -36,23 +38,22 @@ app.layout = html.Div([
             dcc.Markdown('''
             ## Instructions
 
-
             - Please experiment with different initial conditions. 
                 - The initial angles; $\\theta_1$ & $\\theta_2$ are measured counterclockwise in degrees. 
                 - A negative angle gives clockwise rotation.
 
-            - Interesting dynamics can be discovered simply releasing the pendulums from rest. 
-                - The angular velocities; $\omega_1$ & $\omega_2$ can also be specified.
+            - The angular velocities; $\omega_1$ & $\omega_2$ can be specified in $^\circ \ \\text{s}^{-1}$.
+                - *Interesting dynamics can be discovered simply releasing the pendulums from rest;* $(\\omega_i=0)$.  
 
-            - "Unity parameters" sets pendulum arms to $1 \\text{m}$ & masses to $1 \\text{kg}$, with $g = 9.81\\text{m s}^{-1}$.
+            - `Unity parameters` sets pendulum arms to $1 \\text{m}$ & masses to $1 \\text{kg}$, with $g = 9.81\\text{m s}^{-2}$.
 
             - Ensure all initial conditions and parameters are filled.
 
             - There are two models available: 
-                - "Simple" (the default) models a massless rod.
-                - "Compound" models a rod with uniform mass distribution along its length. 
+                - `Simple` (the default) models a massless rod.
+                - `Compound` models a rod with uniform mass distribution along its length. 
 
-            - Use the "Run Simulation" button to start the simulation.
+            - Use the `Run Simulation` button to start the simulation.
             ''', mathjax=True)
         ], style={'flex': 1, 'margin': '20px', 'font-size': "14px"}),
 
@@ -74,7 +75,8 @@ app.layout = html.Div([
                         {'label': 'Simple', 'value': 'simple'},
                         {'label': 'Compound', 'value': 'compound'}
                     ],
-                    value='simple'
+                    value='simple',
+                    clearable=False
                 ),
             ]),
             html.Div(className='container-buttons', children=[
@@ -122,24 +124,49 @@ app.layout = html.Div([
         'font-size': "20px"
     }),
 
-    # Graphs
-    html.Div(className='above-graph-container', children=[
-        dcc.Graph(id='pendulum-animation', className='graph'),
-        dcc.Graph(id='phase-graph', className='graph'),
-    ]),
-    html.Div(className='graph-container', children=[
-        dcc.Graph(id='time-graph', className='graph', responsive=True),
-    ]),
+    # Loading spinner
+    dcc.Loading(
+        id="loading-1",
+        type="default",  # or "circle", "dot", or "cube" for different spinner types
+        children=[
+            # The spinner is while the graphs load (eqns derived!)
+            html.Div(className='above-graph-container', children=[
+                dcc.Graph(id='pendulum-animation', className='graph'),
+                dcc.Graph(id='phase-graph', className='graph'),
+            ]),
+            html.Div(className='graph-container', children=[
+                dcc.Graph(id='time-graph', className='graph', responsive=True),
+            ]),
+        ],
+        # Position the spinner at the top of the container
+        style={'height': '100%', 'position': 'relative'}
+    ),
 
-    # Container for the "The Mathematics" section
-    html.Div([
-        # Markdown container for the mathematics explanation
+    # Internal element to trigger reflow
+    html.Div(id='dummy-div', style={'display': 'none'}),
+
+    # Container for the "The Mathematics" section, initially hidden
+    html.Div(id='mathematics-section', style={'display': 'none', 'margin-top': '20px'}, children=[
         html.Div([
             dcc.Markdown(math_section, mathjax=True)
         ], className='markdown-latex-container', style={'flex': 1}),
-
-    ], style={'display': 'flex', 'margin-top': '20px'}),  # Flex layout with top margin
+    ]),
 ])
+
+app.clientside_callback(
+    """
+    function(n_clicks) {
+        if(n_clicks > 0) {
+            setTimeout(function(){ 
+                window.dispatchEvent(new Event('resize')); 
+            }, 500);
+        }
+        return null; 
+    }
+    """,
+    Output('dummy-div', 'children'),
+    [Input('submit-val', 'n_clicks')],
+)
 
 
 # Callback for the unity parameters
@@ -182,7 +209,8 @@ def reset_values(n_clicks):
      [Output('time-graph', 'figure'),
       Output('phase-graph', 'figure'),
       Output('pendulum-animation', 'figure'),
-      Output('error-message', 'children')],
+      Output('error-message', 'children'),
+      Output('mathematics-section', 'style')],
      [Input('submit-val', 'n_clicks')],
      [State('init_cond_theta1', 'value'),
       State('init_cond_theta2', 'value'),
@@ -269,9 +297,14 @@ def update_graphs(n_clicks, init_cond_theta1, init_cond_theta2, init_cond_omega1
         pendulum.precompute_positions()  # Make sure positions are precomputed
         animation_fig = pendulum.animate_pendulum(trace=True)
 
-        return time_fig, phase_fig, animation_fig, ""
+        if n_clicks and n_clicks > 0:
+            math_style = {'display': 'flex', 'margin-top': '20px'}  # Show the math section
+        else:
+            math_style = {'display': 'none'}  # Hide the math section
+
+        return time_fig, phase_fig, animation_fig, "", math_style
     else:
-        return go.Figure(), go.Figure(), go.Figure(), ""
+        return go.Figure(), go.Figure(), go.Figure(), "", {'display': 'none'}
 
 
 if __name__ == '__main__':

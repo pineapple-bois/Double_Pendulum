@@ -50,22 +50,13 @@ body {
   background-color: #7BA0F0;
 }
 
-#progress-container {
-    margin-top: 20px;
-    border-radius: 5px;
-    overflow: hidden;
+/* custom.css */
+#loading-1 .dash-spinner {
+    position: absolute;
+    top: 0; /* Aligns the spinner to the top of the container */
+    left: 50%; /* Centers the spinner horizontally */
+    transform: translateX(-50%);
 }
-
-#progress-bar {
-    height: 100%;
-    background-color: #4CAF50;
-    text-align: center;
-    line-height: 30px; /* Same as height of container */
-    color: white;
-    border-radius: 5px;
-}
-
-
 
 /* Adjustments for the graphs */
 .graph-container, .above-graph-container {
