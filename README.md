@@ -31,7 +31,7 @@ So $\omega_i$ for $i=1,2$ represents the angular velocity with $\frac{\text{d}}{
 
 ----
 
-### [Model rod: Simulation](Simulation.ipynb)
+### [Model rods: Simulation](Simulation.ipynb)
 
 Systems illustrating periodic/chaotic behaviour are explored.
 
@@ -61,11 +61,11 @@ In this simulation, the only difference is the mass distribution - uniform along
 
 ### Update 10/01/2024: [Refactored taking OOP approach](OOP) 
 
-#### [Functions_OOP.py](OOP/Functions_OOP.py)
+##### [Functions_OOP.py](OOP/Functions_OOP.py)
 
 - The utilities in this file abstract the complex symbolic derivation tasks.
 
-#### [Class_OOP.py](OOP/Class_OOP.py)
+##### [Class_OOP.py](OOP/Class_OOP.py)
 
 - This file defines the `DoublePendulum` class, encapsulating all aspects of a double pendulum simulation within an object-oriented framework. 
 - The class allows for the selection of `simple` or `compound` pendulum models
@@ -74,9 +74,9 @@ In this simulation, the only difference is the mass distribution - uniform along
 
 ----
 
-### Update 13/01/2024: [Dash App](https://double-pendulum-dbd9c9702654.herokuapp.com) Deployed
+### Update 13/01/2024: [Dash App deployed](https://double-pendulum-dbd9c9702654.herokuapp.com)
 
-### [Repository](https://github.com/pineapple-bois/Double_Pendulum_App)
+#### See [Repository](https://github.com/pineapple-bois/Double_Pendulum_App)
 
 ----
 
