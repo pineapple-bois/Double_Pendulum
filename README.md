@@ -25,7 +25,7 @@ The result is a system of $|\textbf{q}|$ coupled, second-order differential equa
 
 The equations are uncoupled by letting $\omega_i = \frac{\text{d}}{\text{d} t}\theta_i$
 
-So $\omega_i$ for $i=1,2$ represents the angular velocity with $\frac{\text{d}}{\text{d} t}\omega_i \equiv \frac{\text{d}^2}{\text{d}^2 t}\theta_i$
+So $\omega_i$ for $i=1,2$ represents the angular velocity with $\frac{\text{d}}{\text{d} t}\omega_i \equiv \frac{\text{d}^2}{\text{d} t^2}\theta_i$
 
 #### [Derivation](Derivation.ipynb)
 
@@ -59,7 +59,7 @@ In this simulation, the only difference is the mass distribution - uniform along
 
 ----
 
-### Update 10/1/2024: [Refactored taking OOP approach](OOP) 
+### Update 10/01/2024: [Refactored taking OOP approach](OOP) 
 
 #### [Functions_OOP.py](OOP/Functions_OOP.py)
 
@@ -74,9 +74,14 @@ In this simulation, the only difference is the mass distribution - uniform along
 
 ----
 
+### Update 13/01/2024: [Dash App](https://double-pendulum-dbd9c9702654.herokuapp.com) Deployed
+
+### [Repository](https://github.com/pineapple-bois/Double_Pendulum_App)
+
+----
+
 ### Next steps
 
-- Creating Dash app
 - Dynamically creating the trace plot on the animation
   - The method I tried was computational expensive - need workaround
   - Non-functioning work-in-progress [code](To_do/dynamic_traces.py)
