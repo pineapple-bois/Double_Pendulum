@@ -74,7 +74,9 @@ In this simulation, the only difference is the mass distribution - uniform along
 
 ----
 
-### Update 13/01/2024: [Dash App deployed](https://double-pendulum-dbd9c9702654.herokuapp.com)
+### Update 13/01/2024: Dash App deployed
+
+[www.double-pendulum.net](http://www.double-pendulum.net)
 
 #### See [Repository](https://github.com/pineapple-bois/Double_Pendulum_App)
 
