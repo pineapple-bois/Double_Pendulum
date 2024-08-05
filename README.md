@@ -27,7 +27,7 @@ The equations are uncoupled by letting $\omega_i = \frac{\text{d}}{\text{d} t}\t
 
 So $\omega_i$ for $i=1,2$ represents the angular velocity with $\frac{\text{d}}{\text{d} t}\omega_i \equiv \frac{\text{d}^2}{\text{d} t^2}\theta_i$
 
-#### [Derivation](Derivation.ipynb)
+#### [Derivation](DerivationLagrangian.ipynb)
 
 ----
 
